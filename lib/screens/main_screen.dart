@@ -6,8 +6,17 @@ import 'deck_screen.dart';
 import 'stats_screen.dart';
 import 'profile_screen.dart';
 
+class SelectedTabNotifier extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void changeTab(int index) {
+    state = index;
+  }
+}
+
 // State provider to track the selected tab
-final selectedTabProvider = StateProvider<int>((ref) => 0);
+final selectedTabProvider = NotifierProvider<SelectedTabNotifier, int>(SelectedTabNotifier.new);
 
 class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
@@ -31,7 +40,7 @@ class MainScreen extends ConsumerWidget {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (index) {
-          ref.read(selectedTabProvider.notifier).state = index;
+          ref.read(selectedTabProvider.notifier).changeTab(index);
         },
         items: const [
           BottomNavigationBarItem(
