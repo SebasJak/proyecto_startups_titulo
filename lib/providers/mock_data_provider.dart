@@ -20,7 +20,7 @@ final mockProjectsProvider = Provider<List<StartupProject>>((ref) {
       description: faker.company.position(),
       videoUrl: videoUrls[index % videoUrls.length],
       // Hardcoded single team leader number per user's MVP clarification
-      ownerPhoneNumber: '+1234567890', 
+      ownerPhoneNumber: '+51904275799', 
       likesCount: faker.randomGenerator.integer(500, min: 10),
       isLikedByMe: false,
     );

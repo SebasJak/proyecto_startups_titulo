@@ -26,12 +26,12 @@ class InteractionBelt extends ConsumerWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        _buildIcon(Icons.favorite_border, project.likesCount.toString(), () {}),
-        _buildIcon(Icons.share, 'Share', () {
+        _buildIcon(Icons.lightbulb_outline, 'Buena idea', () {}),
+        _buildIcon(Icons.share, 'Recomendar', () {
            Share.share('Check out this awesome startup idea: ${project.name}! \n\n${project.description}');
         }),
-        _buildIcon(Icons.bookmark_border, 'Deck', () {}),
-        _buildIcon(Icons.attach_money, 'Invest', () => _launchWhatsApp(context)),
+        _buildIcon(Icons.slideshow, 'Ver Deck', () {}),
+        _buildIcon(Icons.attach_money, 'Invertir', () => _launchWhatsApp(context)),
         const SizedBox(height: 20),
       ],
     );

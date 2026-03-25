@@ -5,10 +5,11 @@ import 'feed_screen.dart';
 import 'deck_screen.dart';
 import 'stats_screen.dart';
 import 'profile_screen.dart';
+import 'tags_screen.dart';
 
 class SelectedTabNotifier extends Notifier<int> {
   @override
-  int build() => 0;
+  int build() => 2; // Home is at index 2
 
   void changeTab(int index) {
     state = index;
@@ -26,9 +27,10 @@ class MainScreen extends ConsumerWidget {
     final currentIndex = ref.watch(selectedTabProvider);
 
     final screens = [
+      const StatsScreen(),
+      const TagsScreen(),
       const FeedScreen(),
       const DeckScreen(),
-      const StatsScreen(),
       const ProfileScreen(),
     ];
 
@@ -44,16 +46,20 @@ class MainScreen extends ConsumerWidget {
         },
         items: const [
           BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart),
+            label: 'Stats',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.local_offer_outlined),
+            label: 'Tags',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.view_carousel), // Deck icon
+            icon: Icon(Icons.slideshow),
             label: 'Deck',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Stats',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
