@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'screens/main_screen.dart';
+import 'screens/new_startup_screen.dart';
 
 void main() {
   runApp(
@@ -17,6 +18,10 @@ final _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (context, state) => const MainScreen(),
+    ),
+    GoRoute(
+      path: '/new_startup',
+      builder: (context, state) => const NewStartupScreen(),
     ),
   ],
 );
