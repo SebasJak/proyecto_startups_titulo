@@ -41,7 +41,7 @@ class ProfileScreen extends StatelessWidget {
                   context.push('/new_startup');
                 },
                 icon: const Icon(Icons.add),
-                label: const Text('Nueva Startup'),
+                label: const Text('Crear Nueva Startup'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.deepPurple,
                   foregroundColor: Colors.white,

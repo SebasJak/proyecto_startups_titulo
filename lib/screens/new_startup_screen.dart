@@ -121,9 +121,7 @@ class _NewStartupScreenState extends State<NewStartupScreen> {
       children: [
         _buildTextField('Nombre de la Startup'),
         const SizedBox(height: 16),
-        _buildTextField('Descripción Corta (One-Liner)', maxLines: 2),
-        const SizedBox(height: 16),
-        _buildTextField('Descripción Completa', maxLines: 5),
+        _buildTextField('Descripción Corta', hintText: 'Describe tu propuesta de valor en 140 caracteres...', maxLines: 2),
       ],
     );
   }
@@ -194,12 +192,14 @@ class _NewStartupScreenState extends State<NewStartupScreen> {
     );
   }
 
-  Widget _buildTextField(String label, {int maxLines = 1}) {
+  Widget _buildTextField(String label, {String? hintText, int maxLines = 1}) {
     return TextField(
       maxLines: maxLines,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
+        hintText: hintText,
+        hintStyle: const TextStyle(color: Colors.white38),
         labelStyle: const TextStyle(color: Colors.white70),
         enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey[700]!)),
         focusedBorder: const OutlineInputBorder(borderSide: BorderSide(color: Colors.deepPurpleAccent)),
