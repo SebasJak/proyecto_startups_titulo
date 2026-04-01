@@ -19,6 +19,7 @@ final mockProjectsProvider = Provider<List<StartupProject>>((ref) {
       name: faker.company.name(),
       description: faker.company.position(),
       videoUrl: videoUrls[index % videoUrls.length],
+      deckUrl: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
       // Hardcoded single team leader number per user's MVP clarification
       ownerPhoneNumber: '+51904275799', 
       likesCount: faker.randomGenerator.integer(500, min: 10),

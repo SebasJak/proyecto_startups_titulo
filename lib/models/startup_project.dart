@@ -3,6 +3,7 @@ class StartupProject {
   final String name;
   final String description;
   final String videoUrl;
+  final String deckUrl; // Added deckUrl for the Ver Deck button
   final String ownerPhoneNumber;
   final int likesCount;
   final bool isLikedByMe;
@@ -12,6 +13,7 @@ class StartupProject {
     required this.name,
     required this.description,
     required this.videoUrl,
+    required this.deckUrl,
     required this.ownerPhoneNumber,
     this.likesCount = 0,
     this.isLikedByMe = false,
@@ -22,6 +24,7 @@ class StartupProject {
     String? name,
     String? description,
     String? videoUrl,
+    String? deckUrl,
     String? ownerPhoneNumber,
     int? likesCount,
     bool? isLikedByMe,
@@ -31,6 +34,7 @@ class StartupProject {
       name: name ?? this.name,
       description: description ?? this.description,
       videoUrl: videoUrl ?? this.videoUrl,
+      deckUrl: deckUrl ?? this.deckUrl,
       ownerPhoneNumber: ownerPhoneNumber ?? this.ownerPhoneNumber,
       likesCount: likesCount ?? this.likesCount,
       isLikedByMe: isLikedByMe ?? this.isLikedByMe,

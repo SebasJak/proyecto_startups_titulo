@@ -21,6 +21,17 @@ class InteractionBelt extends ConsumerWidget {
     }
   }
 
+  Future<void> _launchDeck(BuildContext context) async {
+    final url = Uri.parse(project.deckUrl);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      if (context.mounted) {
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Could not open Deck PDF')));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
@@ -30,7 +41,7 @@ class InteractionBelt extends ConsumerWidget {
         _buildIcon(Icons.share, 'Recomendar', () {
            Share.share('Check out this awesome startup idea: ${project.name}! \n\n${project.description}');
         }),
-        _buildIcon(Icons.slideshow, 'Ver Deck', () {}),
+        _buildIcon(Icons.slideshow, 'Ver Deck', () => _launchDeck(context)),
         _buildIcon(Icons.attach_money, 'Invertir', () => _launchWhatsApp(context)),
         const SizedBox(height: 20),
       ],

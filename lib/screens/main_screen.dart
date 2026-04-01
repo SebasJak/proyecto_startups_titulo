@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'feed_screen.dart';
-import 'deck_screen.dart';
+import 'favorites_screen.dart';
 import 'stats_screen.dart';
 import 'profile_screen.dart';
 import 'tags_screen.dart';
@@ -30,7 +30,7 @@ class MainScreen extends ConsumerWidget {
       const StatsScreen(),
       const TagsScreen(),
       const FeedScreen(),
-      const DeckScreen(),
+      const FavoritesScreen(),
       const ProfileScreen(),
     ];
 
@@ -58,8 +58,8 @@ class MainScreen extends ConsumerWidget {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.slideshow),
-            label: 'Deck',
+            icon: Icon(Icons.bookmark),
+            label: 'Favoritos',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
