@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/mock_data_provider.dart';
+import '../providers/api_data_provider.dart';
 import '../widgets/video_post.dart';
 
 class FeedScreen extends ConsumerWidget {
@@ -8,17 +8,29 @@ class FeedScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projects = ref.watch(mockProjectsProvider);
+    final projectsAsync = ref.watch(apiProjectsProvider);
 
     return Scaffold(
       backgroundColor: Colors.black,
-      body: PageView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: projects.length,
-        itemBuilder: (context, index) {
-          final project = projects[index];
-          return VideoPost(project: project);
+      body: projectsAsync.when(
+        data: (projects) {
+          if (projects.isEmpty) {
+            return const Center(
+                child: Text("No hay startups aún", style: TextStyle(color: Colors.white)));
+          }
+          return PageView.builder(
+            scrollDirection: Axis.vertical,
+            itemCount: projects.length,
+            itemBuilder: (context, index) {
+              final project = projects[index];
+              return VideoPost(project: project);
+            },
+          );
         },
+        loading: () => const Center(
+            child: CircularProgressIndicator(color: Colors.deepPurpleAccent)),
+        error: (err, stack) => Center(
+            child: Text('Error: $err', style: const TextStyle(color: Colors.red))),
       ),
     );
   }

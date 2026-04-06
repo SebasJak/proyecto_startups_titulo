@@ -1,22 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../providers/api_data_provider.dart';
 
-class NewStartupScreen extends StatefulWidget {
+class NewStartupScreen extends ConsumerStatefulWidget {
   const NewStartupScreen({super.key});
 
   @override
-  State<NewStartupScreen> createState() => _NewStartupScreenState();
+  ConsumerState<NewStartupScreen> createState() => _NewStartupScreenState();
 }
 
-class _NewStartupScreenState extends State<NewStartupScreen> {
+class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
   int _currentExpandedIndex = 0; // Starts with the first one expanded
   final int _totalCategories = 6;
 
-  void _submitStartup() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('¡Startup subida exitosamente!')),
-    );
-    context.pop();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitStartup() async {
+    final name = _nameController.text.trim().isEmpty ? "Startup Nueva (Sin Nombre)" : _nameController.text.trim();
+    final desc = _descController.text.trim().isEmpty ? "Startups platform testing submission." : _descController.text.trim();
+
+    try {
+      // POST payload to the backend
+      await submitStartupNetwork({
+        "name": name,
+        "description": desc,
+      });
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('¡Startup subida exitosamente al Backend!')),
+        );
+        
+        // Invalidate the cache to trigger a network refresh on the feed screen!
+        ref.invalidate(apiProjectsProvider);
+        
+        context.pop();
+      }
+    } catch(e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error de red: $e')),
+        );
+      }
+    }
   }
 
   @override
@@ -119,9 +154,9 @@ class _NewStartupScreenState extends State<NewStartupScreen> {
   Widget _buildBasicInfoFields() {
     return Column(
       children: [
-        _buildTextField('Nombre de la Startup'),
+        _buildTextField('Nombre de la Startup', controller: _nameController),
         const SizedBox(height: 16),
-        _buildTextField('Descripción Corta', hintText: 'Describe tu propuesta de valor en 140 caracteres...', maxLines: 2),
+        _buildTextField('Descripción Corta', hintText: 'Describe tu propuesta de valor en 140 caracteres...', maxLines: 2, controller: _descController),
       ],
     );
   }
@@ -192,8 +227,9 @@ class _NewStartupScreenState extends State<NewStartupScreen> {
     );
   }
 
-  Widget _buildTextField(String label, {String? hintText, int maxLines = 1}) {
+  Widget _buildTextField(String label, {String? hintText, int maxLines = 1, TextEditingController? controller}) {
     return TextField(
+      controller: controller,
       maxLines: maxLines,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
