@@ -1,4 +1,4 @@
-package com.example.proyecto_startups_titulo
+package com.example.pegasus_mvp
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:proyecto_startups_titulo/main.dart';
+import 'package:pegasus_mvp/main.dart';
 
 void main() {
   testWidgets('App smoke test', (WidgetTester tester) async {
