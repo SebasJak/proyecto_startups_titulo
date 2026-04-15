@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "357017766948",
+    "project_id": "pegasus-mvp-70271",
+    "storage_bucket": "pegasus-mvp-70271.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:357017766948:android:a02e7976039067d7025cb1",
+        "android_client_info": {
+          "package_name": "com.example.pegasus_mvp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiifa_vLRpamAkEgCi8oArqiwSX4pkyoc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

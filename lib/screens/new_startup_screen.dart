@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../providers/api_data_provider.dart';
+import '../providers/firebase_provider.dart';
 
 class NewStartupScreen extends ConsumerStatefulWidget {
   const NewStartupScreen({super.key});
@@ -29,15 +30,21 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
     final desc = _descController.text.trim().isEmpty ? "Startups platform testing submission." : _descController.text.trim();
 
     try {
-      // POST payload to the backend
-      await submitStartupNetwork({
+      // POST payload to Firestore
+      await submitStartupToFirebase({
         "name": name,
         "description": desc,
+        "videoUrl": "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4", // Default for MVP
+        "deckUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", // Default for MVP
+        "ownerPhoneNumber": "+51904275799", // Current project leader number
+        "likesCount": 0,
+        "isLikedByMe": false,
+        "createdAt": FieldValue.serverTimestamp(),
       });
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('¡Startup subida exitosamente al Backend!')),
+          const SnackBar(content: Text('¡Startup subida exitosamente a Firebase!')),
         );
         
         // Invalidate the cache to trigger a network refresh on the feed screen!
@@ -48,7 +55,7 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
     } catch(e) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error de red: $e')),
+          SnackBar(content: Text('Error de Firebase: $e')),
         );
       }
     }
