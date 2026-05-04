@@ -1,7 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import '../providers/firebase_provider.dart';
 
 class NewStartupScreen extends ConsumerStatefulWidget {
@@ -18,6 +21,10 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
 
+  File? _selectedVideoFile;
+  File? _selectedPdfFile;
+  bool _isUploading = false;
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -25,38 +32,87 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
     super.dispose();
   }
 
+  Future<void> _pickVideo() async {
+    FilePickerResult? result = await FilePicker.pickFiles(type: FileType.video);
+    if (result != null && result.files.single.path != null) {
+      setState(() {
+        _selectedVideoFile = File(result.files.single.path!);
+      });
+    }
+  }
+
+  Future<void> _pickPdf() async {
+    FilePickerResult? result = await FilePicker.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    if (result != null && result.files.single.path != null) {
+      setState(() {
+        _selectedPdfFile = File(result.files.single.path!);
+      });
+    }
+  }
+
   Future<void> _submitStartup() async {
-    final name = _nameController.text.trim().isEmpty ? "Startup Nueva (Sin Nombre)" : _nameController.text.trim();
+    final name = _nameController.text.trim();
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El nombre de la startup es obligatorio.')));
+      return;
+    }
+
+    if (_selectedVideoFile == null || _selectedPdfFile == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Debe seleccionar obligatoriamente un Video y un archivo PDF (Deck).')));
+      return;
+    }
+
     final desc = _descController.text.trim().isEmpty ? "Startups platform testing submission." : _descController.text.trim();
 
+    setState(() {
+      _isUploading = true;
+    });
+
     try {
-      // POST payload to Firestore
+      final storageRef = FirebaseStorage.instance.ref();
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      
+      final videoRef = storageRef.child("startups/videos/$timestamp.mp4");
+      final pdfRef = storageRef.child("startups/decks/$timestamp.pdf");
+
+      await videoRef.putFile(_selectedVideoFile!);
+      final videoUrl = await videoRef.getDownloadURL();
+
+      await pdfRef.putFile(_selectedPdfFile!);
+      final deckUrl = await pdfRef.getDownloadURL();
+
       await submitStartupToFirebase({
         "name": name,
         "description": desc,
-        "videoUrl": "https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4", // Default for MVP
-        "deckUrl": "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf", // Default for MVP
-        "ownerPhoneNumber": "+51904275799", // Current project leader number
+        "videoUrl": videoUrl, // Replaced dummy with actual upload
+        "deckUrl": deckUrl,
+        "ownerPhoneNumber": "+51904275799",
         "likesCount": 0,
         "isLikedByMe": false,
         "createdAt": FieldValue.serverTimestamp(),
       });
 
-      if (context.mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('¡Startup subida exitosamente a Firebase!')),
         );
-        
-        // Invalidate the cache to trigger a network refresh on the feed screen!
         ref.invalidate(apiProjectsProvider);
-        
         context.pop();
       }
     } catch(e) {
-      if (context.mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error de Firebase: $e')),
         );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isUploading = false;
+        });
       }
     }
   }
@@ -127,13 +183,15 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
             height: 50,
             child: ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: _isUploading ? Colors.grey : Colors.deepPurple,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
-              onPressed: _submitStartup,
-              icon: const Icon(Icons.cloud_upload),
-              label: const Text('Subir Startup', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              onPressed: _isUploading ? null : _submitStartup,
+              icon: _isUploading
+                  ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
+                  : const Icon(Icons.cloud_upload),
+              label: Text(_isUploading ? 'Subiendo datos y archivos...' : 'Subir Startup', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             ),
           ),
         ),
@@ -184,17 +242,30 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        _buildTextField('URL del Pitch Video (TikTok format)'),
+        const Text('Pitch Video (TikTok format)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+        const SizedBox(height: 8),
+        OutlinedButton.icon(
+          onPressed: _pickVideo,
+          icon: Icon(_selectedVideoFile == null ? Icons.video_call : Icons.check_circle, 
+                 color: _selectedVideoFile == null ? Colors.white : Colors.greenAccent),
+          label: Text(_selectedVideoFile == null ? 'Seleccionar Video' : 'Video Seleccionado'),
+          style: OutlinedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            side: BorderSide(color: _selectedVideoFile == null ? Colors.deepPurpleAccent : Colors.green),
+            foregroundColor: Colors.white,
+          ),
+        ),
         const SizedBox(height: 24),
         const Text('Pitch Deck (PDF)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
         const SizedBox(height: 8),
         OutlinedButton.icon(
-          onPressed: () {},
-          icon: const Icon(Icons.picture_as_pdf),
-          label: const Text('Subir archivo PDF'),
+          onPressed: _pickPdf,
+          icon: Icon(_selectedPdfFile == null ? Icons.picture_as_pdf : Icons.check_circle,
+                 color: _selectedPdfFile == null ? Colors.white : Colors.greenAccent),
+          label: Text(_selectedPdfFile == null ? 'Seleccionar archivo PDF' : 'PDF Seleccionado'),
           style: OutlinedButton.styleFrom(
             padding: const EdgeInsets.symmetric(vertical: 16.0),
-            side: const BorderSide(color: Colors.deepPurpleAccent),
+            side: BorderSide(color: _selectedPdfFile == null ? Colors.deepPurpleAccent : Colors.green),
             foregroundColor: Colors.white,
           ),
         ),
