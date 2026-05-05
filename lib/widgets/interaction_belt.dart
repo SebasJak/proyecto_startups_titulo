@@ -32,11 +32,32 @@ class InteractionBelt extends ConsumerWidget {
     }
   }
 
+  Future<void> _launchSurvey(BuildContext context) async {
+    if (project.surveyUrl == null || project.surveyUrl!.isEmpty) return;
+    final url = Uri.parse(project.surveyUrl!);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      if (context.mounted) {
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No se pudo abrir la encuesta')));
+      }
+    }
+  }
+
+  void _onGuardarTap(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('¡Guardado en Favoritos!')),
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
+        if (project.surveyUrl != null && project.surveyUrl!.trim().isNotEmpty)
+          _buildIcon(Icons.assignment, 'Encuesta', () => _launchSurvey(context)),
+        _buildIcon(Icons.bookmark_border, 'Guardar', () => _onGuardarTap(context)),
         _buildIcon(Icons.lightbulb_outline, 'Buena idea', () {}),
         _buildIcon(Icons.share, 'Recomendar', () {
            Share.share('Check out this awesome startup idea: ${project.name}! \n\n${project.description}');

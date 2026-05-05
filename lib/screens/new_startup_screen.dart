@@ -20,6 +20,7 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
 
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  final TextEditingController _surveyUrlController = TextEditingController();
 
   File? _selectedVideoFile;
   File? _selectedPdfFile;
@@ -29,6 +30,7 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
   void dispose() {
     _nameController.dispose();
     _descController.dispose();
+    _surveyUrlController.dispose();
     super.dispose();
   }
 
@@ -66,6 +68,7 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
     }
 
     final desc = _descController.text.trim().isEmpty ? "Startups platform testing submission." : _descController.text.trim();
+    final surveyUrl = _surveyUrlController.text.trim().isEmpty ? null : _surveyUrlController.text.trim();
 
     setState(() {
       _isUploading = true;
@@ -89,6 +92,7 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
         "description": desc,
         "videoUrl": videoUrl, // Replaced dummy with actual upload
         "deckUrl": deckUrl,
+        "surveyUrl": surveyUrl,
         "ownerPhoneNumber": "+51904275799",
         "likesCount": 0,
         "isLikedByMe": false,
@@ -222,6 +226,8 @@ class _NewStartupScreenState extends ConsumerState<NewStartupScreen> {
         _buildTextField('Nombre de la Startup', controller: _nameController),
         const SizedBox(height: 16),
         _buildTextField('Descripción Corta', hintText: 'Describe tu propuesta de valor en 140 caracteres...', maxLines: 2, controller: _descController),
+        const SizedBox(height: 16),
+        _buildTextField('URL de Encuesta (Opcional - Google Forms)', controller: _surveyUrlController),
       ],
     );
   }

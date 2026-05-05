@@ -19,6 +19,7 @@ final apiProjectsProvider = FutureProvider<List<StartupProject>>((ref) async {
       videoUrl: data['videoUrl'] ?? '',
       deckUrl: data['deckUrl'] ?? '',
       ownerPhoneNumber: data['ownerPhoneNumber'] ?? '',
+      surveyUrl: data['surveyUrl'],
       likesCount: data['likesCount'] ?? 0,
       isLikedByMe: data['isLikedByMe'] ?? false,
     );
