@@ -41,48 +41,48 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDZpQnu2E_ZbdU4gQl9h0XNm-Irr_FwU_c',
-    appId: '1:357017766948:web:068435292923001c025cb1',
-    messagingSenderId: '357017766948',
-    projectId: 'pegasus-mvp-70271',
-    authDomain: 'pegasus-mvp-70271.firebaseapp.com',
-    storageBucket: 'pegasus-mvp-70271.firebasestorage.app',
-    measurementId: 'G-QYLN5W1VNY',
+    apiKey: 'AIzaSyBJK2a6ETHzHAKyiYqMDb6ipvTthylqjSc',
+    appId: '1:600449930391:web:33ac543661582ad96a45d2',
+    messagingSenderId: '600449930391',
+    projectId: 'pegasus73-14cf4',
+    authDomain: 'pegasus73-14cf4.firebaseapp.com',
+    storageBucket: 'pegasus73-14cf4.firebasestorage.app',
+    measurementId: 'G-N61HT2QBCK',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDiifa_vLRpamAkEgCi8oArqiwSX4pkyoc',
-    appId: '1:357017766948:android:a02e7976039067d7025cb1',
-    messagingSenderId: '357017766948',
-    projectId: 'pegasus-mvp-70271',
-    storageBucket: 'pegasus-mvp-70271.firebasestorage.app',
+    apiKey: 'AIzaSyAT1qBA38VnjrfsQl-fGNaVvmxm0qr2N4c',
+    appId: '1:600449930391:android:e0185748f62e657c6a45d2',
+    messagingSenderId: '600449930391',
+    projectId: 'pegasus73-14cf4',
+    storageBucket: 'pegasus73-14cf4.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBP127cp_yJJJtOn-42ilytKz9aoZ3zP6k',
-    appId: '1:357017766948:ios:60cd5d07a24347e0025cb1',
-    messagingSenderId: '357017766948',
-    projectId: 'pegasus-mvp-70271',
-    storageBucket: 'pegasus-mvp-70271.firebasestorage.app',
+    apiKey: 'AIzaSyDtKy7w2A-BTM-T1Omh33tjr-HnBlHmxOk',
+    appId: '1:600449930391:ios:6e40eee343a367da6a45d2',
+    messagingSenderId: '600449930391',
+    projectId: 'pegasus73-14cf4',
+    storageBucket: 'pegasus73-14cf4.firebasestorage.app',
     iosBundleId: 'com.example.proyectoStartupsTitulo',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBP127cp_yJJJtOn-42ilytKz9aoZ3zP6k',
-    appId: '1:357017766948:ios:60cd5d07a24347e0025cb1',
-    messagingSenderId: '357017766948',
-    projectId: 'pegasus-mvp-70271',
-    storageBucket: 'pegasus-mvp-70271.firebasestorage.app',
+    apiKey: 'AIzaSyDtKy7w2A-BTM-T1Omh33tjr-HnBlHmxOk',
+    appId: '1:600449930391:ios:6e40eee343a367da6a45d2',
+    messagingSenderId: '600449930391',
+    projectId: 'pegasus73-14cf4',
+    storageBucket: 'pegasus73-14cf4.firebasestorage.app',
     iosBundleId: 'com.example.proyectoStartupsTitulo',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyDZpQnu2E_ZbdU4gQl9h0XNm-Irr_FwU_c',
-    appId: '1:357017766948:web:9e9be64b14585467025cb1',
-    messagingSenderId: '357017766948',
-    projectId: 'pegasus-mvp-70271',
-    authDomain: 'pegasus-mvp-70271.firebaseapp.com',
-    storageBucket: 'pegasus-mvp-70271.firebasestorage.app',
-    measurementId: 'G-VT8XTDLJZG',
+    apiKey: 'AIzaSyBJK2a6ETHzHAKyiYqMDb6ipvTthylqjSc',
+    appId: '1:600449930391:web:4fd565ab9d70d35d6a45d2',
+    messagingSenderId: '600449930391',
+    projectId: 'pegasus73-14cf4',
+    authDomain: 'pegasus73-14cf4.firebaseapp.com',
+    storageBucket: 'pegasus73-14cf4.firebasestorage.app',
+    measurementId: 'G-HGPVGG3Y8V',
   );
 }
