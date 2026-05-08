@@ -30,3 +30,9 @@ final apiProjectsProvider = FutureProvider<List<StartupProject>>((ref) async {
 Future<void> submitStartupToFirebase(Map<String, dynamic> startupData) async {
   await FirebaseFirestore.instance.collection('startups').add(startupData);
 }
+
+Future<void> incrementLikeCount(String docId) async {
+  await FirebaseFirestore.instance.collection('startups').doc(docId).update({
+    'likesCount': FieldValue.increment(1),
+  });
+}

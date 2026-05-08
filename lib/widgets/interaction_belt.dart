@@ -2,16 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../providers/favorites_provider.dart';
+import '../providers/firebase_provider.dart';
 import '../models/startup_project.dart';
 
-class InteractionBelt extends ConsumerWidget {
+class InteractionBelt extends ConsumerStatefulWidget {
   final StartupProject project;
 
   const InteractionBelt({super.key, required this.project});
 
+  @override
+  ConsumerState<InteractionBelt> createState() => _InteractionBeltState();
+}
+
+class _InteractionBeltState extends ConsumerState<InteractionBelt> {
+  late int _localLikesCount;
+  bool _hasLiked = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _localLikesCount = widget.project.likesCount;
+  }
+
+  String _formatLikes(int count) {
+    if (count >= 1000000) {
+      return '${(count / 1000000).toStringAsFixed(1)}M';
+    } else if (count >= 1000) {
+      return '${(count / 1000).toStringAsFixed(1)}K';
+    }
+    return count.toString();
+  }
+
   Future<void> _launchWhatsApp(BuildContext context) async {
-    // According to MVP requirements, team leader number is constant, hardcoded in model
-    final url = Uri.parse("whatsapp://send?phone=${project.ownerPhoneNumber}&text=Hi, I am interested in investing in your MVP: ${project.name}");
+    final url = Uri.parse("whatsapp://send?phone=${widget.project.ownerPhoneNumber}&text=Hi, I am interested in investing in your MVP: ${widget.project.name}");
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
@@ -22,7 +46,7 @@ class InteractionBelt extends ConsumerWidget {
   }
 
   Future<void> _launchDeck(BuildContext context) async {
-    final url = Uri.parse(project.deckUrl);
+    final url = Uri.parse(widget.project.deckUrl);
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
@@ -33,8 +57,8 @@ class InteractionBelt extends ConsumerWidget {
   }
 
   Future<void> _launchSurvey(BuildContext context) async {
-    if (project.surveyUrl == null || project.surveyUrl!.isEmpty) return;
-    final url = Uri.parse(project.surveyUrl!);
+    if (widget.project.surveyUrl == null || widget.project.surveyUrl!.isEmpty) return;
+    final url = Uri.parse(widget.project.surveyUrl!);
     if (await canLaunchUrl(url)) {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
@@ -45,22 +69,37 @@ class InteractionBelt extends ConsumerWidget {
   }
 
   void _onGuardarTap(BuildContext context) {
+    ref.read(favoritesProvider.notifier).toggleFavorite(widget.project.id);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('¡Guardado en Favoritos!')),
+      const SnackBar(content: Text('Favoritos actualizados'), duration: Duration(milliseconds: 500)),
     );
   }
 
+  void _onLikeTap() {
+    if (_hasLiked) return;
+    setState(() {
+      _localLikesCount++;
+      _hasLiked = true;
+    });
+    incrementLikeCount(widget.project.id);
+  }
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final favorites = ref.watch(favoritesProvider);
+    final isFavorite = favorites.contains(widget.project.id);
+    
+    final likeLabel = _localLikesCount > 0 ? _formatLikes(_localLikesCount) : 'Buena idea';
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (project.surveyUrl != null && project.surveyUrl!.trim().isNotEmpty)
+        if (widget.project.surveyUrl != null && widget.project.surveyUrl!.trim().isNotEmpty)
           _buildIcon(Icons.assignment, 'Encuesta', () => _launchSurvey(context)),
-        _buildIcon(Icons.bookmark_border, 'Guardar', () => _onGuardarTap(context)),
-        _buildIcon(Icons.lightbulb_outline, 'Buena idea', () {}),
+        _buildIcon(isFavorite ? Icons.bookmark : Icons.bookmark_border, 'Guardar', () => _onGuardarTap(context)),
+        _buildIcon(Icons.lightbulb_outline, likeLabel, _onLikeTap),
         _buildIcon(Icons.share, 'Recomendar', () {
-           Share.share('Check out this awesome startup idea: ${project.name}! \n\n${project.description}');
+           Share.share('Check out this awesome startup idea: ${widget.project.name}! \n\n${widget.project.description}');
         }),
         _buildIcon(Icons.slideshow, 'Ver Deck', () => _launchDeck(context)),
         _buildIcon(Icons.attach_money, 'Invertir', () => _launchWhatsApp(context)),
