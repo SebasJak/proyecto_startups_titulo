@@ -4,6 +4,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../providers/favorites_provider.dart';
 import '../providers/firebase_provider.dart';
+import '../providers/likes_provider.dart';
 import '../models/startup_project.dart';
 
 class InteractionBelt extends ConsumerStatefulWidget {
@@ -17,7 +18,6 @@ class InteractionBelt extends ConsumerStatefulWidget {
 
 class _InteractionBeltState extends ConsumerState<InteractionBelt> {
   late int _localLikesCount;
-  bool _hasLiked = false;
 
   @override
   void initState() {
@@ -76,18 +76,31 @@ class _InteractionBeltState extends ConsumerState<InteractionBelt> {
   }
 
   void _onLikeTap() {
-    if (_hasLiked) return;
-    setState(() {
-      _localLikesCount++;
-      _hasLiked = true;
-    });
-    incrementLikeCount(widget.project.id);
+    final likes = ref.read(likesProvider);
+    final isCurrentlyLiked = likes.contains(widget.project.id);
+
+    if (isCurrentlyLiked) {
+      setState(() {
+        _localLikesCount--;
+      });
+      ref.read(likesProvider.notifier).removeLike(widget.project.id);
+      decrementLikeCount(widget.project.id);
+    } else {
+      setState(() {
+        _localLikesCount++;
+      });
+      ref.read(likesProvider.notifier).addLike(widget.project.id);
+      incrementLikeCount(widget.project.id);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final favorites = ref.watch(favoritesProvider);
     final isFavorite = favorites.contains(widget.project.id);
+    
+    final likes = ref.watch(likesProvider);
+    final isLiked = likes.contains(widget.project.id);
     
     final likeLabel = _localLikesCount > 0 ? _formatLikes(_localLikesCount) : 'Buena idea';
 
@@ -97,7 +110,7 @@ class _InteractionBeltState extends ConsumerState<InteractionBelt> {
         if (widget.project.surveyUrl != null && widget.project.surveyUrl!.trim().isNotEmpty)
           _buildIcon(Icons.assignment, 'Encuesta', () => _launchSurvey(context)),
         _buildIcon(isFavorite ? Icons.bookmark : Icons.bookmark_border, 'Guardar', () => _onGuardarTap(context)),
-        _buildIcon(Icons.lightbulb_outline, likeLabel, _onLikeTap),
+        _buildIcon(isLiked ? Icons.lightbulb : Icons.lightbulb_outline, likeLabel, _onLikeTap),
         _buildIcon(Icons.share, 'Recomendar', () {
            Share.share('Check out this awesome startup idea: ${widget.project.name}! \n\n${widget.project.description}');
         }),

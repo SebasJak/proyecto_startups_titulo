@@ -36,3 +36,9 @@ Future<void> incrementLikeCount(String docId) async {
     'likesCount': FieldValue.increment(1),
   });
 }
+
+Future<void> decrementLikeCount(String docId) async {
+  await FirebaseFirestore.instance.collection('startups').doc(docId).update({
+    'likesCount': FieldValue.increment(-1),
+  });
+}
