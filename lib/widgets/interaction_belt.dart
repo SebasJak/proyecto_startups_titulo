@@ -35,12 +35,12 @@ class _InteractionBeltState extends ConsumerState<InteractionBelt> {
   }
 
   Future<void> _launchWhatsApp(BuildContext context) async {
-    final url = Uri.parse("whatsapp://send?phone=${widget.project.ownerPhoneNumber}&text=Hi, I am interested in investing in your MVP: ${widget.project.name}");
+    final url = Uri.parse("whatsapp://send?phone=${widget.project.ownerPhoneNumber}&text=Hola, estoy interesado en invertir en tu MVP: ${widget.project.name}");
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
       if (context.mounted) {
-         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Could not launch WhatsApp')));
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No se pudo abrir WhatsApp')));
       }
     }
   }
@@ -51,7 +51,7 @@ class _InteractionBeltState extends ConsumerState<InteractionBelt> {
       await launchUrl(url, mode: LaunchMode.externalApplication);
     } else {
       if (context.mounted) {
-         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Could not open Deck PDF')));
+         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('No se pudo abrir el Deck PDF')));
       }
     }
   }
@@ -112,7 +112,7 @@ class _InteractionBeltState extends ConsumerState<InteractionBelt> {
         _buildIcon(isFavorite ? Icons.bookmark : Icons.bookmark_border, 'Guardar', () => _onGuardarTap(context)),
         _buildIcon(isLiked ? Icons.lightbulb : Icons.lightbulb_outline, likeLabel, _onLikeTap),
         _buildIcon(Icons.share, 'Recomendar', () {
-           Share.share('Check out this awesome startup idea: ${widget.project.name}! \n\n${widget.project.description}');
+           Share.share('¡Mira esta increíble idea de startup: ${widget.project.name}! \n\n${widget.project.description}');
         }),
         _buildIcon(Icons.slideshow, 'Ver Deck', () => _launchDeck(context)),
         _buildIcon(Icons.attach_money, 'Invertir', () => _launchWhatsApp(context)),

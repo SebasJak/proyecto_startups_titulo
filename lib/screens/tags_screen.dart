@@ -6,9 +6,9 @@ class TagsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tags')),
+      appBar: AppBar(title: const Text('Etiquetas')),
       body: const Center(
-        child: Text('Work in progress: Startup Categories / Tags'),
+        child: Text('En desarrollo: Categorías / Etiquetas de Startups'),
       ),
     );
   }

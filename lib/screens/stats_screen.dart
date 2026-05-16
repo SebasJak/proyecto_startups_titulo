@@ -6,16 +6,16 @@ class StatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('My Projects Stats')),
+      appBar: AppBar(title: const Text('Estadísticas de mis Proyectos')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            _buildStatCard('Total Views', '12,450', Icons.visibility, Colors.blue),
+            _buildStatCard('Vistas Totales', '12,450', Icons.visibility, Colors.blue),
             const SizedBox(height: 16),
-            _buildStatCard('Total Likes', '3,210', Icons.favorite, Colors.red),
+            _buildStatCard('Me gusta Totales', '3,210', Icons.favorite, Colors.red),
             const SizedBox(height: 16),
-            _buildStatCard('Interested Investors', '45', Icons.people, Colors.green),
+            _buildStatCard('Inversores Interesados', '45', Icons.people, Colors.green),
           ],
         ),
       ),

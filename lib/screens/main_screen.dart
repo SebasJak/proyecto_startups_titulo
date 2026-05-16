@@ -44,17 +44,20 @@ class MainScreen extends ConsumerWidget {
           ref.read(selectedTabProvider.notifier).changeTab(index);
         },
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.bar_chart), label: 'Stats'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bar_chart),
+            label: 'Estadísticas',
+          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_offer_outlined),
-            label: 'Tags',
+            label: 'Etiquetas',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
             icon: Icon(Icons.bookmark),
             label: 'Favoritos',
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil'),
         ],
       ),
     );

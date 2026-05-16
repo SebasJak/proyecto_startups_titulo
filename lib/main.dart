@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'providers/theme_provider.dart';
 import 'screens/main_screen.dart';
 import 'screens/new_startup_screen.dart';
 
@@ -32,16 +33,26 @@ final _router = GoRouter(
   ],
 );
 
-class PegasusApp extends StatelessWidget {
+class PegasusApp extends ConsumerWidget {
   const PegasusApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
+
     return MaterialApp.router(
       title: 'Pegasus',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.dark,
+      themeMode: themeMode,
+      theme: ThemeData.light().copyWith(
+        primaryColor: Colors.deepPurple,
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          selectedItemColor: Colors.deepPurple,
+          unselectedItemColor: Colors.grey,
+          type: BottomNavigationBarType.fixed,
+        ),
+      ),
+      darkTheme: ThemeData.dark().copyWith(
         primaryColor: Colors.deepPurple,
         scaffoldBackgroundColor: Colors.black,
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
