@@ -5,31 +5,69 @@ class StatsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Estadísticas de mis Proyectos')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildStatCard('Vistas Totales', '12,450', Icons.visibility, Colors.blue),
-            const SizedBox(height: 16),
-            _buildStatCard('Me gusta Totales', '3,210', Icons.favorite, Colors.red),
-            const SizedBox(height: 16),
-            _buildStatCard('Inversores Interesados', '45', Icons.people, Colors.green),
-          ],
-        ),
-      ),
-    );
-  }
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
-    return Card(
-      color: Colors.grey[900],
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        leading: Icon(icon, color: color, size: 36),
-        title: Text(title, style: const TextStyle(color: Colors.white70)),
-        trailing: Text(value, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Estadísticas')),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: LinearGradient(
+                    colors: [Colors.deepPurple.shade400, Colors.blueAccent],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: const Icon(Icons.bar_chart_rounded, size: 56, color: Colors.white),
+              ),
+              const SizedBox(height: 32),
+              ShaderMask(
+                shaderCallback: (bounds) => LinearGradient(
+                  colors: [Colors.deepPurpleAccent, Colors.blueAccent],
+                ).createShader(bounds),
+                child: const Text(
+                  'Próximamente',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800, color: Colors.white),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Estamos construyendo un panel de estadísticas para que puedas ver el rendimiento de tus startups en tiempo real.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 15,
+                  color: isDark ? Colors.white54 : Colors.black54,
+                  height: 1.5,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.blueAccent.withValues(alpha: 0.15),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.blueAccent.withValues(alpha: 0.4)),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.science_outlined, size: 16, color: Colors.blueAccent),
+                    SizedBox(width: 6),
+                    Text('BETA', style: TextStyle(color: Colors.blueAccent, fontWeight: FontWeight.w800, fontSize: 13, letterSpacing: 1.2)),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
