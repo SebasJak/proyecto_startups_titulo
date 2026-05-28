@@ -12,30 +12,34 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _whatsappController = TextEditingController();
+  final TextEditingController _founderController = TextEditingController();
+  final TextEditingController _whatsappController = TextEditingController(text: '+51904275799');
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
+  final TextEditingController _surveyUrlController = TextEditingController();
 
   bool _isUploading = false;
 
   @override
   void dispose() {
-    _emailController.dispose();
+    _founderController.dispose();
     _whatsappController.dispose();
     _nameController.dispose();
+    _descController.dispose();
+    _surveyUrlController.dispose();
     super.dispose();
   }
 
   Future<void> _submitData() async {
-    final email = _emailController.text.trim();
+    final founderName = _founderController.text.trim();
     final whatsapp = _whatsappController.text.trim();
-    final name = _nameController.text.trim();
+    final startupName = _nameController.text.trim();
+    final desc = _descController.text.trim();
+    final surveyUrl = _surveyUrlController.text.trim().isEmpty ? null : _surveyUrlController.text.trim();
 
-    if (email.isEmpty || whatsapp.isEmpty || name.isEmpty) {
+    if (founderName.isEmpty || whatsapp.isEmpty || startupName.isEmpty || desc.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Por favor, completa todos los campos requeridos.'),
-        ),
+        const SnackBar(content: Text('Por favor, completa todos los campos requeridos.')),
       );
       return;
     }
@@ -45,27 +49,36 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     });
 
     try {
-      await submitSimpleUserToFirebase({
-        "name": name,
-        "email": email,
-        "phoneNumber": whatsapp,
+      final combinedDesc = "$founderName - $desc";
+
+      await submitStartupToFirebase({
+        "name": startupName,
+        "description": combinedDesc,
+        "videoUrl": "", // Managed manually by project owner
+        "deckUrl": "", // Managed manually by project owner
+        "surveyUrl": surveyUrl,
+        "ownerPhoneNumber": "+51904275799", // MVP fixed number
+        "likesCount": 0,
+        "isLikedByMe": false,
         "createdAt": FieldValue.serverTimestamp(),
       });
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('¡Usuario subido exitosamente!')),
+          const SnackBar(content: Text('¡Datos subidos exitosamente!')),
         );
-        _emailController.clear();
+        _founderController.clear();
         _whatsappController.clear();
         _nameController.clear();
-        ref.invalidate(apiSimpleUsersProvider);
+        _descController.clear();
+        _surveyUrlController.clear();
+        ref.invalidate(apiProjectsProvider);
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
       }
     } finally {
       if (mounted) {
@@ -76,13 +89,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     }
   }
 
-  Widget _buildTextField(
-    String label, {
-    String? hintText,
-    int maxLines = 1,
-    required TextEditingController controller,
-    bool readOnly = false,
-  }) {
+  Widget _buildTextField(String label, {String? hintText, int maxLines = 1, required TextEditingController controller, bool readOnly = false}) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -135,23 +142,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             const SizedBox(height: 16),
             Center(
               child: Text(
-                'Registro de Usuario',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).textTheme.bodyLarge?.color,
-                ),
+                'Registro de Startup',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyLarge?.color),
               ),
             ),
             const SizedBox(height: 24),
-            _buildTextField('Correo de Contacto', controller: _emailController),
+            _buildTextField('Nombre del Founder / Líder', controller: _founderController),
+            const SizedBox(height: 16),
+            _buildTextField('Número de WhatsApp de Contacto', controller: _whatsappController, readOnly: true),
+            const SizedBox(height: 16),
+            _buildTextField('Nombre de la Startup', controller: _nameController),
             const SizedBox(height: 16),
             _buildTextField(
-              'Número de Contacto',
-              controller: _whatsappController,
+              'Descripción Corta',
+              hintText: 'Describe tu propuesta de valor en 140 caracteres...',
+              maxLines: 2,
+              controller: _descController,
             ),
             const SizedBox(height: 16),
-            _buildTextField('Nombre Completo', controller: _nameController),
+            _buildTextField('URL de Encuesta (Opcional - Google Forms)', controller: _surveyUrlController),
             const SizedBox(height: 32),
             _isUploading
                 ? const Center(child: CircularProgressIndicator())
@@ -161,17 +170,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       backgroundColor: Colors.deepPurple,
                       foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
-                    child: const Text(
-                      'Subir usuario',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    child: const Text('Subir datos', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   ),
           ],
         ),
