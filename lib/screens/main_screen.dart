@@ -48,7 +48,7 @@ class MainScreen extends ConsumerWidget {
             icon: Stack(
               clipBehavior: Clip.none,
               children: [
-                const Icon(Icons.bar_chart),
+                const Icon(Icons.upgrade),
                 Positioned(
                   right: -18,
                   top: -6,
@@ -74,13 +74,13 @@ class MainScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            label: 'Estadísticas',
+            label: 'Gamificación',
           ),
           BottomNavigationBarItem(
             icon: Stack(
               clipBehavior: Clip.none,
               children: [
-                const Icon(Icons.local_offer_outlined),
+                const Icon(Icons.local_activity),
                 Positioned(
                   right: -18,
                   top: -6,
@@ -106,7 +106,7 @@ class MainScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            label: 'Etiquetas',
+            label: 'Cupones',
           ),
           const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           const BottomNavigationBarItem(
