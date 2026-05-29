@@ -57,6 +57,8 @@ final apiSimpleUsersProvider = FutureProvider<List<SimpleUser>>((ref) async {
       name: data['name'] ?? 'Sin nombre',
       phoneNumber: data['phoneNumber'] ?? '',
       email: data['email'] ?? '',
+      dni: data['dni'],
+      profilePicUrl: data['profilePicUrl'],
     );
   }).toList();
 });

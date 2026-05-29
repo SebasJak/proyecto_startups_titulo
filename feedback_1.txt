@@ -1,0 +1,11 @@
+## Project Owner Feedback 1 (!--About the Profile Screen--)
+
+[10:27 a. m., 28/5/2026] : No sé si es mucho problema pero podríamos poner la opción de subir foto o tal vez elegir un avatar precargado
+(!--He means a "plus" mini-symbol over the circle avatar so that the user can click on it to upload a photo.--)
+[10:28 a. m., 28/5/2026] : También podríamos agregar la opción de dni
+[10:28 a. m., 28/5/2026] : Además podríamos cambiar subir usuario por "crear cuenta"
+[10:29 a. m., 28/5/2026] : Lo que sí sería bueno es vincular el Google con la cuenta que quieran
+[10:29 a. m., 28/5/2026] : Que por lo que me comentaste no es complicado
+[10:29 a. m., 28/5/2026] : Pero independientemente del Google sí quiero que pongan a parte: nombre, correo, teléfono y dni
+[10:31 a. m., 28/5/2026] : Además un botón de soporte y contacto para que me hablen directamente
+[10:31 a. m., 28/5/2026] : Eso lo sacamos ni bien crezcamos
