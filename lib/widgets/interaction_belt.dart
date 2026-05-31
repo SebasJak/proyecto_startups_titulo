@@ -17,22 +17,7 @@ class InteractionBelt extends ConsumerStatefulWidget {
 }
 
 class _InteractionBeltState extends ConsumerState<InteractionBelt> {
-  late int _localLikesCount;
 
-  @override
-  void initState() {
-    super.initState();
-    _localLikesCount = widget.project.likesCount;
-  }
-
-  String _formatLikes(int count) {
-    if (count >= 1000000) {
-      return '${(count / 1000000).toStringAsFixed(1)}M';
-    } else if (count >= 1000) {
-      return '${(count / 1000).toStringAsFixed(1)}K';
-    }
-    return count.toString();
-  }
 
   Future<void> _launchWhatsApp(BuildContext context) async {
     final url = Uri.parse("whatsapp://send?phone=${widget.project.ownerPhoneNumber}&text=Hola, estoy interesado en invertir en tu MVP: ${widget.project.name}");
@@ -80,15 +65,9 @@ class _InteractionBeltState extends ConsumerState<InteractionBelt> {
     final isCurrentlyLiked = likes.contains(widget.project.id);
 
     if (isCurrentlyLiked) {
-      setState(() {
-        _localLikesCount--;
-      });
       ref.read(likesProvider.notifier).removeLike(widget.project.id);
       decrementLikeCount(widget.project.id);
     } else {
-      setState(() {
-        _localLikesCount++;
-      });
       ref.read(likesProvider.notifier).addLike(widget.project.id);
       incrementLikeCount(widget.project.id);
     }
@@ -102,7 +81,7 @@ class _InteractionBeltState extends ConsumerState<InteractionBelt> {
     final likes = ref.watch(likesProvider);
     final isLiked = likes.contains(widget.project.id);
     
-    final likeLabel = _localLikesCount > 0 ? _formatLikes(_localLikesCount) : 'Buena idea';
+    final likeLabel = 'Buena idea';
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
@@ -114,8 +93,8 @@ class _InteractionBeltState extends ConsumerState<InteractionBelt> {
         _buildIcon(Icons.share, 'Recomendar', () {
            Share.share('¡Mira esta increíble idea de startup: ${widget.project.name}! \n\n${widget.project.description}');
         }),
-        _buildIcon(Icons.slideshow, 'Ver Deck', () => _launchDeck(context)),
-        _buildIcon(Icons.attach_money, 'Invertir', () => _launchWhatsApp(context)),
+        _buildIcon(Icons.co_present, 'Ver Deck', () => _launchDeck(context)),
+        _buildIcon(Icons.attach_money, 'Avalar', () => _launchWhatsApp(context)),
         const SizedBox(height: 20),
       ],
     );

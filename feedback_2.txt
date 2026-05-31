@@ -1,0 +1,12 @@
+## Project Owner Feedback 2
+[10:35 a. m., 28/5/2026] : El botón de buena idea tiene que decir: buena idea, como para acostumbrar al usuario de para qué sirve el botón
+[10:35 a. m., 28/5/2026] : El icono de ver deck podríamos cambiarlo pero déjame buscar una sugerencia
+[10:35 a. m., 28/5/2026] : Y está bien el símbolo de invertir
+[10:35 a. m., 28/5/2026] : Pero debe llamarse "Avalar"
+[10:37 a. m., 28/5/2026] : Todavía no sé exactamente cómo debería verse esta pantalla (!--He is refering to the Favorites screen.--)
+[10:37 a. m., 28/5/2026] : Si me puedes dar sugerencias en base a lo que podríamos mejorar de forma más rápida
+[10:37 a. m., 28/5/2026] : Te lo agradecería un montón
+(!--Any suggestions?--)
+[10:38 a. m., 28/5/2026] : Arreglemos esos pequeños detalles
+[10:38 a. m., 28/5/2026] : Y luego será simplemente hacer las pruebas ya subiendo los proyectos
+[10:38 a. m., 28/5/2026] : Una vez que eso funcione, lanzamos.
